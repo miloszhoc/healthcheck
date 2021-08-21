@@ -14,5 +14,5 @@ if __name__ == '__main__':
             assert requests.get(website).status_code == 200
     except (AssertionError, requests.exceptions.ConnectionError):
         mail = MailSender(EMAIL_HOST, EMAIL_PORT_SSL, SOURCE_EMAIL, EMAIL_PASSWD, TARGET_EMAIL)
-        mail.send_email(EMAIL_SUBJECT, EMAIL_MESSAGE)
+        mail.send_email(EMAIL_SUBJECT, '{} \n'.format(website) + EMAIL_MESSAGE)
         print('message sent')
