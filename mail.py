@@ -20,16 +20,14 @@ class MailSender():
         self.__smtp.starttls()
         self.__smtp.login(self.__source_email, self.__passwd)
 
-    def send_email(self, message):
+    def send_email(self, subject, message):
         content = "\r\n".join([
             "From: {}".format(self.__source_email),
             "To: {}".format(self.__target_email),
-            "Subject: Website is down!",
+            "Subject: {}".format(subject),
             "",
             "{}".format(message)
         ])
         self.__start_connection()
         self.__smtp.sendmail(self.__source_email, [self.__target_email, ], content)
         self.__quit()
-
-

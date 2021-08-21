@@ -1,14 +1,18 @@
-from config import EMAIL_HOST, EMAIL_PORT_SSL, SOURCE_EMAIL, EMAIL_PASSWD, TARGET_EMAIL
+from config import EMAIL_HOST, EMAIL_PORT_SSL, SOURCE_EMAIL, EMAIL_PASSWD, TARGET_EMAIL, EMAIL_SUBJECT, EMAIL_MESSAGE
 from mail import MailSender
 import requests
+import argparse
 
 if __name__ == '__main__':
-    main_page = requests.get('http://miloszhoc.cloud')
-    apache = requests.get('http://miloszhoc.cloud:81')
+    parser = argparse.ArgumentParser(prog='main',
+                                     description="Health check")
+    parser.add_argument('-w', help='Names of the websites to check', nargs='*')
+    args = parser.parse_args()
+
     try:
-        assert main_page.status_code == 200
-        assert apache.status_code != 200
-    except AssertionError:
+        for website in args.w:
+            assert requests.get(website).status_code == 200
+    except (AssertionError, requests.exceptions.ConnectionError):
         mail = MailSender(EMAIL_HOST, EMAIL_PORT_SSL, SOURCE_EMAIL, EMAIL_PASSWD, TARGET_EMAIL)
-        mail.send_email('Your website is down!')
+        mail.send_email(EMAIL_SUBJECT, EMAIL_MESSAGE)
         print('message sent')
