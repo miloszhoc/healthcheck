@@ -16,4 +16,4 @@ if __name__ == '__main__':
     except (AssertionError, requests.exceptions.ConnectionError):
         mail = MailSender(EMAIL_HOST, EMAIL_PORT_SSL, SOURCE_EMAIL, EMAIL_PASSWD, TARGET_EMAIL)
         mail.send_email(EMAIL_SUBJECT, '{} \n'.format(website) + EMAIL_MESSAGE)
-        print('Message sent (' + datetime.datetime.now().__str__() + ')')
+        print('Website ' + website + ' down. ' + 'Message sent (' + datetime.datetime.now().__str__() + ')')
